@@ -1,0 +1,12 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  annotations:
+    olm.providedAPIs: Nginx.v1alpha1.demo.example.com
+  name: demo27-pjd5q
+  namespace: demo27
+spec:
+  upgradeStrategy: Default
+status:
+  namespaces:
+  - ""
