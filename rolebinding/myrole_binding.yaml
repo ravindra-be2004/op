@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app: rolebinding 
+  name: pod-reader-rolebinding
+  namespace: demo406
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: pod-reader-role
+subjects:
+- kind: User
+  name: virat
