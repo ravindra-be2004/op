@@ -1,0 +1,24 @@
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: listener
+spec:
+  serviceAccountName: tekton-triggers-example-sa
+  triggers:
+    - name: foo-trig
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: ci-webhook
+                secretKey: secret
+            - name: "eventTypes"
+              value: ["push"]
+      bindings:
+        - ref: pipeline-binding
+        - ref: message-binding
+      template:
+        ref: pipeline-template

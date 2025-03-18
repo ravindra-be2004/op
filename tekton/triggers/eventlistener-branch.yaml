@@ -1,0 +1,16 @@
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: listener
+spec:
+  serviceAccountName: tekton-triggers-example-sa
+  triggers:
+    - name: foo-trig
+      interceptors:
+      - cel:
+          filter: "(header.match('X-GitHub-Event', 'pull_request') && body.action == 'opened' || body.action == 'synchronize' )"
+      bindings:
+        - ref: message-binding
+      template:
+        ref: pipeline-template

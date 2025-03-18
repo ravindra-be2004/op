@@ -1,0 +1,36 @@
+﻿apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: simple-pipeline-
+  labels:
+    tekton.dev/pipeline: simple-pipeline
+spec:
+  pipelineRef:
+    name: simple-pipeline
+  serviceAccountName: pipeline
+  timeout: 1h0m0s
+  workspaces:
+    - name: git-source
+      volumeClaimTemplate:
+        metadata:
+          creationTimestamp: null
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: nfs-storage
+          volumeMode: Filesystem
+  params:
+  - name: message
+    value: "my test message"
+  - name: contenttype
+    value: 'application/json'
+  - name: git-url
+    #    value: 'https://github.com/ravindra-be2004/testrep'
+    value: 'https://git.ocp4.example.com/developer/testrep'
+  - name: git-revision
+    value: 'main'
+
+

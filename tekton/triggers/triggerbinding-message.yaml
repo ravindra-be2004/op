@@ -1,0 +1,8 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: message-binding
+spec:
+  params:
+  - name: message
+    value: $(body.pull_request.head.ref)

@@ -1,0 +1,15 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: el-listener
+spec:
+  host: el-listener-triggers-demo.apps.ocp4.example.com
+  port:
+    targetPort: http-listener
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: el-listener
+    weight: 100
+  wildcardPolicy: None

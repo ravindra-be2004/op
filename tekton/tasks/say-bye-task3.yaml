@@ -1,0 +1,15 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: say-bye
+spec:
+  workspaces:
+    - name: git-source
+      #      mountPath: /workspace
+  steps:
+  - name: say-bye
+    image: bash
+    command: ["bash", "-c"]
+    args:
+    - echo 'Goodbye Triggers!'

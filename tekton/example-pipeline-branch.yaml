@@ -1,0 +1,30 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: simple-pipeline
+spec:
+  params:
+  - name: message
+    description: The message to print
+    default: This is the default message
+    type: string
+  workspaces:
+  - name: git-source
+  tasks:
+  - name: say-message
+    taskRef:
+      name: say-message
+    params:
+    - name: message
+      value: $(params.message)
+    workspaces:
+      - name: git-source
+        workspace: git-source
+  - name: say-bye
+    runAfter: [say-message]
+    taskRef:
+      name: say-bye
+    workspaces:
+      - name: git-source
+        workspace: git-source
