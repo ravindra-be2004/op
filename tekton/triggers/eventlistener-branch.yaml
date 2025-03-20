@@ -9,7 +9,7 @@ spec:
     - name: foo-trig
       interceptors:
       - cel:
-          filter: "(header.match('X-GitHub-Event', 'pull_request') && body.action == 'opened' || body.action == 'synchronize' )"
+          filter: "(header.match('X-GitHub-Event', 'push') && body.action == 'opened' || body.action == 'synchronize' || body.action == 'close')"
       bindings:
         - ref: message-binding
       template:

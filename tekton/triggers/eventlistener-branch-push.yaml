@@ -1,0 +1,23 @@
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: listener
+spec:
+  serviceAccountName: tekton-triggers-example-sa
+  triggers:
+    - name: foo-trig
+      interceptors:
+        - name: "verify-gitlab-payload"
+          ref:
+            name: "gitlab"
+            kind: ClusterInterceptor
+          params:
+            - name: eventTypes
+              value:
+                - "Push Hook"
+                  #          filter: "(header.match('X-GitHub-Event', 'push') && body.action == 'opened' || body.action == 'synchronize' || body.action == 'close')"
+      bindings:
+        - ref: message-binding
+      template:
+        ref: pipeline-template
