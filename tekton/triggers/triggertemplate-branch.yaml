@@ -17,7 +17,8 @@ spec:
         name: simple-pipeline
       params:
       - name: message
-        value: $(tt.params.message)
+        #        value: $(tt.params.message)
+        value: $(context.pipelineRun.namespace)
       workspaces:
       - name: git-source
         emptyDir: {}

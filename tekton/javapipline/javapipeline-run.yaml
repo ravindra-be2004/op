@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+ generateName: java-cicd-pipeline-run-
+spec:
+  pipelineRef:
+    name: java-cicd-pipeline
+  serviceAccountName: pipeline
+  workspaces:
+    - name: source-code
+      volumeClaimTemplate:
+        metadata:
+          creationTimestamp: null
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: nfs-storage
+          volumeMode: Filesystem
+      subpath: source
+        
+    - name: maven-repo 
+      volumeClaimTemplate:
+        metadata:
+          creationTimestamp: null
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+          storageClassName: nfs-storage
+          volumeMode: Filesystem
+      subpath: m2

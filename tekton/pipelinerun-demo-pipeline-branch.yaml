@@ -24,7 +24,8 @@ spec:
           volumeMode: Filesystem
   params:
   - name: message
-    value: "my test message"
+    #   value: $(context.pipelineRun.name)
+    value: $(context.pipelineRun.namespace)
   - name: contenttype
     value: 'application/json'
   - name: git-url

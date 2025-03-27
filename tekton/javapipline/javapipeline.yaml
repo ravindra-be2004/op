@@ -1,0 +1,87 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: java-cicd-pipeline
+spec:
+  tasks:
+    - name: clone-git-repo
+      params:
+        - name: url
+          value: 'https://github.com/tektutor/spring-ms.git'
+        - name: revision
+          value: master
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: source-code
+    #Task compile the maven project
+    - name: compile
+      params:
+        - name: GOALS
+          value:
+            - -Dmaven.repo.local=$(workspaces.maven-settings.path)
+            - compile
+      runAfter:
+        - clone-git-repo
+      taskRef:
+        name: maven
+      workspaces:
+        - name: source
+          workspace: source-code
+        - name: maven-settings
+          workspace: maven-repo
+   #Task that perform unit test
+    - name: test
+      params:
+        - name: GOALS
+          value: 
+            - -Dmaven.repo.local=$(workspaces.maven-settings.path)
+            - test
+      runAfter:
+        - compile
+      taskRef:
+        name: maven
+      workspaces:
+        - name: source
+          workspace: source-code
+        - name: maven-settings
+          workspace: maven-repo
+   #Task to package unit test maven project
+    - name: package
+      params:
+        - name: GOALS
+          value:
+            - -Dmaven.repo.local=$(workspaces.maven-settings.path)
+            - package
+      runAfter:
+        - test
+      taskRef:
+        name: maven
+      workspaces:
+        - name: source
+          workspace: source-code
+        - name: maven-settings
+          workspace: maven-repo
+   #TAsk that install the package into local maven binary
+    - name: install
+      params:
+        - name: GOALS
+          value:
+            - -Dmaven.repo.local=$(workspaces.maven-settings.path)
+            - install 
+      runAfter:
+        - package
+      taskRef:
+        name: maven
+      workspaces:
+        - name: source
+          workspace: source-code
+        - name: maven-settings
+          workspace: maven-repo
+  workspaces:
+    - name: source-code
+    - name: maven-repo
+
+
+
